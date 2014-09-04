@@ -1,6 +1,6 @@
 This widget has been written specifically for [David Spriggs CMV project](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI) to provide a tool for projecting coordinates between specified projections. 
 
-
+![screendump](https://github.com/tr3vorm/tr3vorm.github.io/blob/master/projection-screen.JPG)
 ## Configuration viewer.js
 ```javascript    
 projection: {
