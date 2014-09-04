@@ -1,35 +1,19 @@
-/*
- - table does not draw until first marker is placed
- - grid to wide in smaller devices/sidebar
- - does not handle bad projections 
- - replaec x/y with east/north and lat/long
-*/
 define([
 	'dojo/_base/declare',
 	'dijit/_WidgetBase',
 	'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/layout/TabContainer',
-    'dijit/layout/ContentPane',
     'dojox/grid/DataGrid',
     'dojo/data/ItemFileWriteStore',
-    'dojo/dom',
 	'dojo/_base/lang',
-    'dojo/_base/Color',
-
     'esri/layers/GraphicsLayer',
     'esri/graphic',
     'esri/renderers/SimpleRenderer',
-    'esri/symbols/SimpleMarkerSymbol',
-    'esri/symbols/SimpleLineSymbol',
     'esri/symbols/PictureMarkerSymbol',
     'esri/graphicsUtils',
     'esri/geometry/Point',
     'esri/SpatialReference',
-
-	'dojo/html',
-    'dojo/dom-style',
-	'dojo/number',
+	'esri/geometry/Extent',
 	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.1/proj4.js',
     'dojo/text!./Projection/templates/Projection.html',
 	'xstyle/css!./Projection/css/Projection.css'
@@ -38,17 +22,11 @@ define([
 	_WidgetBase,
 	_TemplatedMixin,
     _WidgetsInTemplateMixin,
-    TabContainer,
-    ContentPane,
-    DataGrid, ItemFileWriteStore, dom,
+    DataGrid, ItemFileWriteStore, 
 	lang,
-    Color, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, PictureMarkerSymbol, graphicsUtils, Point, SpatialReference,
-	html,
-	style,
-	number,
+    GraphicsLayer, Graphic, SimpleRenderer, PictureMarkerSymbol, graphicsUtils, Point, SpatialReference, Extent,
 	proj4,
-    template,
-    css
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         map: null,
@@ -99,7 +77,7 @@ define([
         },
         _createProjectionGrid: function () {
             var data = {
-                identifier: "id",
+                identifier: 'id',
                 items: []
             };
             //for (var i = 0; i < this.projectionList.length; i++) {
@@ -128,7 +106,7 @@ define([
         },
 
         _initialize: function (map) {
-            this.map.on('click', lang.hitch(this, function (evt) {
+            map.on('click', lang.hitch(this, function (evt) {
                 if (this.mapClickMode.current === 'projection') {
                     this._onClick(evt);
                 }
@@ -142,7 +120,6 @@ define([
 
             //load projection for each srid and add row to grid
             for (var i = 0; i < this.projectionList.length; i++) {
-                var key = this.proj4Catalog + ':' + String(this.projectionList[i].srid);
                 var myNewItem = { id: i, name: this.projectionList[i].title, x: '', y: '' };
                 this.projectionGrid.store.newItem(myNewItem);
                 
@@ -208,7 +185,7 @@ define([
         },
 
         clearProjections: function () {
-            dijit.byId("toggleme").set('checked', false); // will raise the toggleMode event
+            dijit.byId('toggleme').set('checked', false); // will raise the toggleMode event
 
             for (var i = 0; i < this.projectionList.length; i++) {
                 var item = this.projectionGrid.getItem(i);
