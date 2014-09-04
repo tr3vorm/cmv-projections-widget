@@ -1,0 +1,18 @@
+<div class="gis-ProjectionDijit">
+    <div data-dojo-attach-point="projectionGrid" class="projectionGrid" style="height:200px;width:280px" >
+         <!--data-dojo-attach-event="onApplyEdit:reProject">-->
+    </div>
+
+    <button id="toggleme" data-dojo-type="dijit.form.ToggleButton" data-dojo-props="iconClass:'locateIcon',showLabel:false,checked:false"
+            data-dojo-attach-event="onChange:toggleMode">
+        Locate
+    </button>
+    <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'clearIcon',showLabel:true"
+            data-dojo-attach-event="onClick:clearProjections">
+        Clear
+    </button>
+    <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'zoomIcon',showLabel:true"
+            data-dojo-attach-event="onClick:zoomtoMarker">
+        ZoomTo
+    </button>
+</div>
