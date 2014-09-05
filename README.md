@@ -1,4 +1,4 @@
-This widget has been written specifically for [David Spriggs CMV project](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI) to provide a tool for projecting coordinates between specified projections. 
+This widget has been written specifically for [David Spriggs CMV project](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI) to provide a tool for projecting coordinates between specified projections. It allows a user to place a marker on the map, to report the coordinates at that location in configured coordinate systems. The use can edit the coordinates for any projection within the grid, and the marker will move to the new location as well as updating all projected coordinated.
 
 ![screendump](https://github.com/tr3vorm/tr3vorm.github.io/blob/master/projection-screen.JPG)
 ## Configuration viewer.js
