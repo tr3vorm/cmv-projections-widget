@@ -75,14 +75,15 @@ define([
                 map.on('load', lang.hitch(this, '_initialize', map));
             }
         },
+
         _createProjectionGrid: function () {
             var data = {
                 identifier: 'id',
                 items: []
             };
-            //for (var i = 0; i < this.projectionList.length; i++) {
-            //    data.items.push({ id: i, name: this.projectionList[i].title, x: ' ', y: ' ' });
-            //}
+            for (var i = 0; i < this.projectionList.length; i++) {
+                data.items.push({ 'id': i, 'name': this.projectionList[i].title, 'x': '', 'y': '' });
+            }
             this.projectionStore = new ItemFileWriteStore({ data: data });
 
             var layout = [
@@ -118,15 +119,13 @@ define([
             }
             this.baseProjection = proj4.defs('EPSG' + ':' + String(wkid));
 
-            //load projection for each srid and add row to grid
+            //load projection for each srid 
             for (var i = 0; i < this.projectionList.length; i++) {
-                var myNewItem = { id: i, name: this.projectionList[i].title, x: '', y: '' };
-                this.projectionGrid.store.newItem(myNewItem);
-                
                 var url = this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + this.projectionList[i].srid + '/proj4js/';
                 require([url]); 
             }
         },
+
         _onClick: function (evt) {
             this._project(evt.mapPoint);
         },
@@ -139,9 +138,14 @@ define([
                 var projPnt = proj4(this.baseProjection, proj4.defs(key)).forward([pnt.x, pnt.y]);
 
                 var item = this.projectionGrid.getItem(i);
-                var precision = ((proj4.defs(key)).indexOf('units=m') > -1 ? 2 : 7); // hack: if it ain't metres, it's degrees
-                this.projectionGrid.store.setValue(item, 'x', projPnt[0].toFixed(precision));
-                this.projectionGrid.store.setValue(item, 'y', projPnt[1].toFixed(precision));
+                if (proj4.defs(key)) {
+                    var precision = (proj4.defs(key)).indexOf('units=m') > -1 ? 2 : 7; // hack: if it ain't metres, it's degrees
+                    this.projectionGrid.store.setValue(item, 'x', projPnt[0].toFixed(precision));
+                    this.projectionGrid.store.setValue(item, 'y', projPnt[1].toFixed(precision));
+                } else {
+                    this.projectionGrid.store.setValue(item, 'x', 'Error');
+                    this.projectionGrid.store.setValue(item, 'y', 'Error');
+                }
             }
         },
 
