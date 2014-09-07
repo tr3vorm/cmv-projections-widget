@@ -145,22 +145,24 @@ define([
                 } else {
                     this.projectionGrid.store.setValue(item, 'x', 'Error');
                     this.projectionGrid.store.setValue(item, 'y', 'Error');
+                    //item.customStyles += 'background-color:#FFB93F;'
                 }
             }
         },
 
         _reProjection: function (rowIndex) {
-            // clear OTHER rows required???
-            // get item
             var item = this.projectionGrid.getItem(rowIndex);
             // project back to base map coords
             var key = this.proj4Catalog + ':' + String(this.projectionList[rowIndex].srid);
-            var pnt = proj4(proj4.defs(key), this.baseProjection).forward([item.x, item.y]);
 
-            // move marker and project from new position
-            var point = new Point(pnt[0], pnt[1], new SpatialReference({ wkid: this.map.spatialReference.wkid }));
-            this._project(point);
-            this.zoomtoMarker(); // maybe turn this off or option
+            if (proj4.defs(key)) {
+                var pnt = proj4(proj4.defs(key), this.baseProjection).forward([item.x, item.y]);
+
+                // move marker and project from new position
+                var point = new Point(pnt[0], pnt[1], new SpatialReference({ wkid: this.map.spatialReference.wkid }));
+                this._project(point);
+                this.zoomtoMarker(); // maybe turn this off or option
+            }
         },
 
         _drawMarker: function (pnt) {
