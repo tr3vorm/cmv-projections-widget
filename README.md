@@ -3,21 +3,23 @@ This widget has been written specifically for [David Spriggs CMV project](https:
 ![screendump](https://github.com/tr3vorm/tr3vorm.github.io/blob/master/projection-screen.JPG)
 ## Configuration viewer.js
 ```javascript    
-projection: {
-    include: true,
-    id: 'projection',
-    type: 'titlePane',
-    canFloat: true,
-    position: 10,
-    path: 'gis/dijit/Projection',
-    title: 'Projections',
-    options: {
-        map: true,
-        mapClickMode: true,
-        projectionList: [
-            { title: 'NAD27', srid: 2029 },
-            { title: 'WGS84', srid: 4167 }
-        ]
+widgets {
+    projection: {
+        include: true,
+        id: 'projection',
+        type: 'titlePane',
+        canFloat: true,
+        position: 10,
+        path: 'gis/dijit/Projection',
+        title: 'Projections',
+        options: {
+            map: true,
+            mapClickMode: true,
+            projectionList: [
+                { title: 'NAD27', srid: 2029 },
+                { title: 'WGS84', srid: 4167 }
+            ]
+        }
     }
 }
 ```
