@@ -6,6 +6,7 @@ define([
     'dojox/grid/DataGrid',
     'dojo/data/ItemFileWriteStore',
 	'dojo/_base/lang',
+    'dojo/topic',
     'esri/layers/GraphicsLayer',
     'esri/graphic',
     'esri/renderers/SimpleRenderer',
@@ -23,7 +24,7 @@ define([
 	_TemplatedMixin,
     _WidgetsInTemplateMixin,
     DataGrid, ItemFileWriteStore, 
-	lang,
+	lang, topic,
     GraphicsLayer, Graphic, SimpleRenderer, PictureMarkerSymbol, graphicsUtils, Point, SpatialReference, Extent,
 	proj4,
     template
@@ -68,6 +69,8 @@ define([
 
             this._createProjectionGrid();
 
+            this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+
             //initialize when map loaded
             if (map.loaded) {
                 this._initialize(map);
@@ -76,6 +79,9 @@ define([
             }
         },
 
+        setMapClickMode: function (mode) {
+            this.mapClickMode = mode;
+        },
         _createProjectionGrid: function () {
             var data = {
                 identifier: 'id',
@@ -108,7 +114,7 @@ define([
 
         _initialize: function (map) {
             map.on('click', lang.hitch(this, function (evt) {
-                if (this.mapClickMode.current === 'projection') {
+                if (this.mapClickMode === 'projection') {
                     this._onClick(evt);
                 }
             }));
@@ -182,12 +188,12 @@ define([
 
         locatePoint: function () {
             this.map.setMapCursor('crosshair');
-            this.mapClickMode.current = 'projection';
+            topic.publish('mapClickMode/setCurrent', 'projection');
         },
 
         cancelProjection: function () {
             this.map.setMapCursor('auto');
-            this.mapClickMode.current = this.mapClickMode.defaultMode;
+            topic.publish('mapClickMode/setDefault');
         },
 
         clearProjections: function () {
