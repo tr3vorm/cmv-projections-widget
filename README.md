@@ -31,7 +31,3 @@ Click **Clear** to clear the grid as well as turn the location selection off.
 **ZoomTo** will always recentre the Flag on the map (if one is there). 
 
 Last, but not least. **All of the cells in the grid can be edited**. Simply enter/change a coordinate in any projection, and the flag will be moved, the map recentred and all coordinates updated.
-
-## Caveats
- - The srid (e.g. 2193) in the config is used to load the projection definition from spatialreference.org/ref/epsg/**2193**/proj4js/ - all srids in the config must resolve!
- - Have not tested this for non web-mercator basemaps
