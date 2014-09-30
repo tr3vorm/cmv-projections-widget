@@ -15,7 +15,7 @@ define([
     'esri/geometry/Point',
     'esri/SpatialReference',
 	'esri/geometry/Extent',
-	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.1/proj4.js',
+	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js',
     'dojo/text!./Projection/templates/Projection.html',
 	'xstyle/css!./Projection/css/Projection.css'
 ], function (
@@ -123,7 +123,7 @@ define([
             if (wkid === 102100) { // ESRI --> EPSG
                 wkid = 3857;
             }
-            this.baseProjection = proj4.defs('EPSG' + ':' + String(wkid));
+            this.baseProjection = this.proj4Catalog + ':' +String(wkid);
 
             //load projection for each srid 
             for (var i = 0; i < this.projectionList.length; i++) {
@@ -141,7 +141,7 @@ define([
 
             for (var i = 0; i < this.projectionList.length; i++) {
                 var key = this.proj4Catalog + ':' + String(this.projectionList[i].srid);
-                var projPnt = proj4(this.baseProjection, proj4.defs(key)).forward([pnt.x, pnt.y]);
+                var projPnt = proj4(proj4.defs[this.baseProjection], proj4.defs(key)).forward([pnt.x, pnt.y]);
 
                 var item = this.projectionGrid.getItem(i);
                 if (proj4.defs(key)) {
@@ -162,7 +162,7 @@ define([
             var key = this.proj4Catalog + ':' + String(this.projectionList[rowIndex].srid);
 
             if (proj4.defs(key)) {
-                var pnt = proj4(proj4.defs(key), this.baseProjection).forward([item.x, item.y]);
+                var pnt = proj4(proj4.defs(key), proj4.defs[this.baseProjection]).forward([item.x, item.y]);
 
                 // move marker and project from new position
                 var point = new Point(pnt[0], pnt[1], new SpatialReference({ wkid: this.map.spatialReference.wkid }));
