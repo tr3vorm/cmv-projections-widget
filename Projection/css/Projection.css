@@ -1,6 +1,8 @@
 .gis-ProjectionDijit {
     overflow: hidden;
     font-size: 90%;
+	vertical-align: middle;
+	width: 100% !important;
 }
 
 .gis-ProjectionDijit .locateIcon {
@@ -19,4 +21,51 @@
     background-image: url(../images/zoom.png);
     width: 16px;
     height: 16px;
+}
+
+/* Override of widget styles (!important tag used to overide .js style in jsapi) */
+
+.gis-ProjectionDijit .dojoxGridRow tr {
+  background-color: #FFFFFF;
+  color: #666666;
+  border-color: #DDD #DDD #DDD #DDD;
+  font-size: 14px;
+}
+
+.gis-ProjectionDijit .dojoxGridHeader{
+width: 100% !important;
+left: 0px !important
+}
+
+.gis-ProjectionDijit .dojoxGridHeader div{
+width: 100% !important
+}
+
+.gis-ProjectionDijit .dojoxGridHeader .dojoxGridCell {
+  background-image: none !important;
+  background-color: #F5F5F5 !important;
+  border-color: #DDD #DDD #DDD #DDD;
+}
+
+.gis-ProjectionDijit .dojoxGridHeader .dojoxGridCell div {
+  color: #666666;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.gis-ProjectionDijit .dojoxGridView {
+width: 100% !important;
+left: 0px !important
+}
+
+.gis-ProjectionDijit .dojoxGridView  div{
+width: 100% !important
+}
+
+.gis-ProjectionDijit .dojoxGridRowTable {
+width: 100% !important
+}
+
+.gis-ProjectionDijit .dojoxGridContent div{
+width: 100% !important
 }
