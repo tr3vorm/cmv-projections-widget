@@ -93,9 +93,9 @@ define([
             this.projectionStore = new ItemFileWriteStore({ data: data });
 
             var layout = [
-               { 'name': 'Name', 'field': 'name', 'width': '100px', 'noresize': 'true', styles: 'bold;text-align: right;' },
-               { 'name': 'x', 'field': 'x', 'width': '88px', 'noresize': 'true', 'editable': 'true', styles: 'text-align: right;' },
-               { 'name': 'y', 'field': 'y', 'width': '89px', 'noresize': 'true', 'editable': 'true', styles: 'text-align: right;' }
+               { 'name': 'Name', 'field': 'name', 'width': '24%', 'noresize': 'true', styles: 'bold;text-align: left;' },
+               { 'name': 'x', 'field': 'x', 'width': '38%', 'noresize': 'true', 'editable': 'true', styles: 'text-align: left;' },
+               { 'name': 'y', 'field': 'y', 'width': '38%', 'noresize': 'true', 'editable': 'true', styles: 'text-align: left;' }
             ];
 
             this.projectionGrid = new DataGrid({
