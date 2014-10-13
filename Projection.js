@@ -55,8 +55,7 @@ define([
             // https://github.com/proj4js/proj4js/issues/23
             window.Proj4js = proj4;
 
-            this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/Projection/images/orange-flag.png'), 32, 32);
-            this.pointSymbol.setOffset(12, 14);
+            this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/Projection/images/crosshair32.png'), 32, 32);
             this.pointGraphics = new GraphicsLayer({
                 id: 'test_graphics',
                 title: 'Test'
