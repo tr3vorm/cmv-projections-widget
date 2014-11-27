@@ -7,6 +7,7 @@ define([
     'dojo/data/ItemFileWriteStore',
 	'dojo/_base/lang',
     'dojo/topic',
+    'dojo/aspect',
     'esri/layers/GraphicsLayer',
     'esri/graphic',
     'esri/renderers/SimpleRenderer',
@@ -15,7 +16,7 @@ define([
     'esri/geometry/Point',
     'esri/SpatialReference',
 	'esri/geometry/Extent',
-	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js',
+	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js',
     'dojo/text!./Projection/templates/Projection.html',
 	'xstyle/css!./Projection/css/Projection.css'
 ], function (
@@ -23,8 +24,8 @@ define([
 	_WidgetBase,
 	_TemplatedMixin,
     _WidgetsInTemplateMixin,
-    DataGrid, ItemFileWriteStore, 
-	lang, topic,
+    DataGrid, ItemFileWriteStore,
+	lang, topic, aspect,
     GraphicsLayer, Graphic, SimpleRenderer, PictureMarkerSymbol, graphicsUtils, Point, SpatialReference, Extent,
 	proj4,
     template
@@ -34,8 +35,8 @@ define([
         widgetsInTemplate: true,
         templateString: template,
         baseClass: 'gis_ProjectionDijit',
-        // in case this changes some day
-        proj4BaseURL: 'http://spatialreference.org/',
+        // proj4BaseURL default: http://spatialreference.org/ (no ssl) or //epsg.io/, or /local/folder/ 
+        proj4BaseURL: '//epsg.io/',
         //  options are ESRI, EPSG and SR-ORG
         // See http://spatialreference.org/ for more information
         baseProjection: null,
@@ -50,10 +51,10 @@ define([
                 this.destroy();
                 return;
             }
-            // spatialreference.org uses the old
-            // Proj4js style so we need an alias
-            // https://github.com/proj4js/proj4js/issues/23
-            window.Proj4js = proj4;
+
+            if (!window.proj4) {
+                window.proj4 = proj4;
+            }
 
             this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/Projection/images/crosshair32.png'), 32, 32);
             this.pointGraphics = new GraphicsLayer({
@@ -69,6 +70,12 @@ define([
             this._createProjectionGrid();
 
             this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+
+            if (this.parentWidget && this.parentWidget.toggleable) {
+                this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+                    this.clearProjections();
+                })));
+            }
 
             //initialize when map loaded
             if (map.loaded) {
@@ -122,12 +129,14 @@ define([
             if (wkid === 102100) { // ESRI --> EPSG
                 wkid = 3857;
             }
-            this.baseProjection = this.proj4Catalog + ':' +String(wkid);
+            this.baseProjection = this.proj4Catalog + ':' + String(wkid);
+            if (this.proj4BaseURL.slice(-1) != '/')
+                this.proj4BaseURL += '/';
 
             //load projection for each srid 
             for (var i = 0; i < this.projectionList.length; i++) {
-                var url = this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + this.projectionList[i].srid + '/proj4js/';
-                require([url]); 
+                var url = this.proj4BaseURL + String(this.projectionList[i].srid) + '.js';
+                require([url]);
             }
         },
 
@@ -144,7 +153,7 @@ define([
 
                 var item = this.projectionGrid.getItem(i);
                 if (proj4.defs(key)) {
-                    var precision = (proj4.defs(key)).indexOf('units=m') > -1 ? 2 : 7; // hack: if it ain't metres, it's degrees
+                    var precision = proj4.defs(key).units == 'm' ? 2 : 7; // hack: if it ain't metres, it's degrees
                     this.projectionGrid.store.setValue(item, 'x', projPnt[0].toFixed(precision));
                     this.projectionGrid.store.setValue(item, 'y', projPnt[1].toFixed(precision));
                 } else {
