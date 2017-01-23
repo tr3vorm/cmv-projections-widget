@@ -16,7 +16,7 @@ define([
     'esri/geometry/Point',
     'esri/SpatialReference',
 	'esri/geometry/Extent',
-	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js',
+	'proj4js/proj4',
     'dojo/text!./Projection/templates/Projection.html',
 	'xstyle/css!./Projection/css/Projection.css'
 ], function (
@@ -138,6 +138,7 @@ define([
                 var url = this.proj4BaseURL + String(this.projectionList[i].srid) + '.js';
                 require([url]);
             }
+            this.clearProjections();
         },
 
         _onClick: function (evt) {
